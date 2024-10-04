@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DefaultController!{% endblock %}
+{% block title %}Hello World!{% endblock %}
 
 {% block body %}
 <style>
@@ -9,12 +9,14 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello Symfony! ✅</h1>
 
-    This friendly message is coming from:
+    The menus are listed below
     <ul>
-        <li>Your controller at <code>C:/xampp/htdocs/Authentication_Project/src/Controller/DefaultController.php</code></li>
-        <li>Your template at <code>C:/xampp/htdocs/Authentication_Project/templates/default/index.html.twig</code></li>
+        <li> <a href="{{ path('login') }}">Login</a> </li>
+        <li> <a href="{{ path('app_register') }}">Register</a></li>
+        <li> <a href="{{ path('logout') }}">Logout</a></li>
+
     </ul>
 </div>
 {% endblock %}
