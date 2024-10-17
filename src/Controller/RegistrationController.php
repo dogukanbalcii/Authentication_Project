@@ -21,11 +21,40 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
+            $email = $user->getEmail();
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->addFlash('error', 'Please provide a valid email address.');
+                return $this->render('registration/register.html.twig', [
+                    'registrationForm' => $form,
+                ]);
+            }
+
             $plainPassword = $form->get('plainPassword')->getData();
+            if (strlen($plainPassword) < 6 ||
+                !preg_match('/[a-zA-Z]/', $plainPassword) ||  // En az bir harf
+                !preg_match('/[0-9]/', $plainPassword)) {     // En az bir rakam
+                $this->addFlash('error', 'Password must be at least 6 characters long and contain both letters and numbers.');
+                return $this->render('registration/register.html.twig', [
+                    'registrationForm' => $form,
+                ]);
+            }
+
+            $selectedRole = $form->get('roles')->getData(); // 'roles' alanının ismi burada belirtilmeli
+            if (empty($selectedRole)) {
+                $this->addFlash('error', 'You must select a role (User, Admin, or Super Admin).');
+                return $this->render('registration/register.html.twig', [
+                    'registrationForm' => $form,
+                ]);
+            }
+
+            if (!$form->get('agreeTerms')->getData()) {
+                $this->addFlash('error', 'You must agree 1231231212 to the terms.');
+                return $this->render('registration/register.html.twig', [
+                    'registrationForm' => $form,
+                ]);
+            }
 
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-
 
             $entityManager->persist($user);
             $entityManager->flush();
