@@ -3,16 +3,24 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+    <a href="{{ path('app_default') }}"><h1>Home</h1></a>
     <h1>Register</h1>
 
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
+        {{ form_row(registrationForm.email, {
+            label: 'E-Mail '
         }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Password '
+        }) }}
+        {{ form_row(registrationForm.roles, {
+            label: 'Select Role '
+        }) }}
+        {{ form_row(registrationForm.agreeTerms, {
+            label: 'Agree Terms '
+        }) }}
 
         <button type="submit" class="btn">Register</button>
     {{ form_end(registrationForm) }}

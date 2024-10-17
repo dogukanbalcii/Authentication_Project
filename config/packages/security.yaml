@@ -1,4 +1,9 @@
 security:
+    role_hierarchy:
+        ROLE_SUPER_ADMIN:
+            - ROLE ADMIN
+        ROLE_ADMIN:
+            - ROLE USER
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -21,10 +26,11 @@ security:
                 login_path: login
                 check_path: login
                 username_parameter: _username
+                enable_csrf: true
 
             logout:
                 path: logout
-                target: /
+                target: /login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

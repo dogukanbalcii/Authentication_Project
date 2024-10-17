@@ -9,7 +9,12 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello Symfony! ✅</h1>
+
+    {% if app.user %}
+        <h1>Welcome, {{ app.user.email }} <br>Your role is {{ app.user.roles[0] }}</h1>
+    {% else %}
+        <h1>Hello Guest! ✅</h1>
+    {% endif %}
 
     The menus are listed below
     <ul>

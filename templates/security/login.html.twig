@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <a href="{{ path('app_default') }}"><h1>Home</h1></a>
     <h1>Login</h1>
     <form action="{{ path('login') }}" method="post">
         <label for="email">Email:</label>
@@ -8,6 +9,8 @@
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="_password" required>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
         <button type="submit">Login</button>
     </form>
