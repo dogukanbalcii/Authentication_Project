@@ -11,16 +11,21 @@
 <div class="example-wrapper">
 
     {% if app.user %}
-        <h1>Welcome, {{ app.user.email }} <br>Your role is {{ app.user.roles[0] }}</h1>
+        <h1>Welcome, {{ app.user.email }} ✅ <br>Your role is {{ app.user.roles[0] }}</h1>
     {% else %}
         <h1>Hello Guest! ✅</h1>
     {% endif %}
 
     The menus are listed below
     <ul>
+        {% if app.user %}
+        <li> <a href="{{ path('app_register') }}">Register</a></li>
+        <li> <a href="{{ path('logout') }}">Logout</a></li>
+        {% else %}
         <li> <a href="{{ path('login') }}">Login</a> </li>
         <li> <a href="{{ path('app_register') }}">Register</a></li>
         <li> <a href="{{ path('logout') }}">Logout</a></li>
+        {% endif %}
 
     </ul>
 </div>
