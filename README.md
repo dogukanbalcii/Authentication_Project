@@ -26,6 +26,7 @@ This project is an authentication system built with Symfony 6.4. It includes reg
 
 ### Form Security
 - **CSRF Protection:** Both registration and login forms are protected against CSRF attacks using Symfony's built-in token generation.
+- **JWT Token:** The application uses JSON Web Tokens (JWT) for authentication, providing a stateless and secure method for user identity verification. JWT tokens are generated upon successful login and must be included in subsequent requests for access to protected resources, enhancing overall security.
 
 
 # Screenshots
