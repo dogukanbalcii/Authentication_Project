@@ -39,6 +39,7 @@ security:
                 check_path: login
                 username_parameter: _username
                 enable_csrf: true
+                success_handler: App\Security\JwtSuccessHandler
 
             logout:
                 path: logout
@@ -53,6 +54,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/logout, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
 

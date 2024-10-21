@@ -33,6 +33,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    /**
+     * @var string|null The token for the user
+     */
+    #[ORM\Column(length: 1024, nullable: true)]
+    private ?string $token = null;
     public function getId(): ?int
     {
         return $this->id;
@@ -95,6 +100,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get the token.
+     */
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set the token.
+     */
+    public function setToken(?string $token): static
+    {
+        $this->token = $token;
 
         return $this;
     }
