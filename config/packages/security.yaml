@@ -3,9 +3,9 @@ security:
 
     role_hierarchy:
         ROLE_SUPER_ADMIN:
-            - ROLE ADMIN
+            - ROLE_ADMIN
         ROLE_ADMIN:
-            - ROLE USER
+            - ROLE_USER
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -21,6 +21,7 @@ security:
             pattern: ^/api/login
             stateless: true
             json_login:
+                provider: app_user_provider
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
@@ -54,6 +55,8 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/dashboard, roles: ROLE_USER }
         - { path: ^/logout, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
