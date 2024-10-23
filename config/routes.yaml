@@ -1,5 +1,7 @@
 api_login_check:
     path: /api/login_check
+api_refresh_token:
+    path: /api/token/refresh
 homepage:
     path: /
     controller: App\Controller\DefaultController::index
@@ -7,3 +9,4 @@ homepage:
 App\Controller\:
     resource: '../src/Controller/'
     type: attribute
+
