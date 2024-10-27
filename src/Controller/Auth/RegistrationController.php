@@ -4,61 +4,41 @@ namespace App\Controller\Auth;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Services\Auth\RegistrationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends AbstractController
 {
+    private RegistrationService $registrationService;
+
+    public function __construct(RegistrationService $registrationService)
+    {
+        $this->registrationService = $registrationService;
+    }
+
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+        $errors = [];
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $email = $user->getEmail();
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $this->addFlash('error', 'Please provide a valid email address.');
+            if (!$this->registrationService->validateRegistrationForm($form, $errors)) {
+                foreach ($errors as $error) {
+                    $this->addFlash('error', $error);
+                }
                 return $this->render('auth/registration/register.html.twig', [
                     'registrationForm' => $form,
                 ]);
             }
 
-            $plainPassword = $form->get('plainPassword')->getData();
-            if (strlen($plainPassword) < 6 ||
-                !preg_match('/[a-zA-Z]/', $plainPassword) ||  // En az bir harf
-                !preg_match('/[0-9]/', $plainPassword)) {     // En az bir rakam
-                $this->addFlash('error', 'Password must be at least 6 characters long and contain both letters and numbers.');
-                return $this->render('auth/registration/register.html.twig', [
-                    'registrationForm' => $form,
-                ]);
-            }
-
-            $selectedRole = $form->get('roles')->getData(); // 'roles' alanının ismi burada belirtilmeli
-            if (empty($selectedRole)) {
-                $this->addFlash('error', 'You must select a role (User, Admin, or Super Admin).');
-                return $this->render('auth/registration/register.html.twig', [
-                    'registrationForm' => $form,
-                ]);
-            }
-
-            if (!$form->get('agreeTerms')->getData()) {
-                $this->addFlash('error', 'You must agree 1231231212 to the terms.');
-                return $this->render('auth/registration/register.html.twig', [
-                    'registrationForm' => $form,
-                ]);
-            }
-
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
+            $this->registrationService->registerUser($user, $form);
             return $this->redirectToRoute('homepage');
         }
 
