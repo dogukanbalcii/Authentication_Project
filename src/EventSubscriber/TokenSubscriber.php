@@ -42,7 +42,7 @@ class TokenSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $session = $request->getSession();
 
-        $protectedRoutes = ['/admin', '/dashboard', '/register'];
+        $protectedRoutes = ['/admin', '/user'];
 
         if (in_array($request->getPathInfo(), $protectedRoutes)) {
             if ($session->has('jwt')) {

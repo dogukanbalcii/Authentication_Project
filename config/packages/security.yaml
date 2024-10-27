@@ -61,7 +61,9 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/dashboard, roles: ROLE_USER }
+        - { path: ^/admin/dashboard, roles: ROLE_ADMIN }
+        - { path: ^/user/dashboard, roles: ROLE_USER }
+        - { path: ^/auth, roles: PUBLIC_ACCESS }
         - { path: ^/logout, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }

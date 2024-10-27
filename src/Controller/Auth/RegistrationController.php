@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Auth;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
@@ -24,7 +24,7 @@ class RegistrationController extends AbstractController
             $email = $user->getEmail();
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $this->addFlash('error', 'Please provide a valid email address.');
-                return $this->render('registration/register.html.twig', [
+                return $this->render('auth/registration/register.html.twig', [
                     'registrationForm' => $form,
                 ]);
             }
@@ -34,7 +34,7 @@ class RegistrationController extends AbstractController
                 !preg_match('/[a-zA-Z]/', $plainPassword) ||  // En az bir harf
                 !preg_match('/[0-9]/', $plainPassword)) {     // En az bir rakam
                 $this->addFlash('error', 'Password must be at least 6 characters long and contain both letters and numbers.');
-                return $this->render('registration/register.html.twig', [
+                return $this->render('auth/registration/register.html.twig', [
                     'registrationForm' => $form,
                 ]);
             }
@@ -42,14 +42,14 @@ class RegistrationController extends AbstractController
             $selectedRole = $form->get('roles')->getData(); // 'roles' alanının ismi burada belirtilmeli
             if (empty($selectedRole)) {
                 $this->addFlash('error', 'You must select a role (User, Admin, or Super Admin).');
-                return $this->render('registration/register.html.twig', [
+                return $this->render('auth/registration/register.html.twig', [
                     'registrationForm' => $form,
                 ]);
             }
 
             if (!$form->get('agreeTerms')->getData()) {
                 $this->addFlash('error', 'You must agree 1231231212 to the terms.');
-                return $this->render('registration/register.html.twig', [
+                return $this->render('auth/registration/register.html.twig', [
                     'registrationForm' => $form,
                 ]);
             }
@@ -62,7 +62,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('auth/registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
     }

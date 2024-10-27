@@ -20,9 +20,14 @@
     <ul>
         {% if app.user %}
             {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_SUPER_ADMIN' in app.user.roles %}
-                <li> <a href="{{ path('admin') }}">Admin</a></li>
+                <li> <a href="{{ path('admin') }}">Admin Panel</a></li>
             {% endif %}
-        <li> <a href="{{ path('dashboard') }}">Dashboard</a></li>
+            {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_SUPER_ADMIN' in app.user.roles %}
+                <li> <a href="{{ path('admin_dashboard') }}">Admin Dashboard</a></li>
+            {% endif %}
+            {% if 'ROLE_USER' in app.user.roles %}
+                <li> <a href="{{ path('user_dashboard') }}">User Dashboard</a></li>
+            {% endif %}
         <li> <a href="{{ path('app_register') }}">Register</a></li>
         <li> <a href="{{ path('logout') }}">Logout</a></li>
         {% else %}

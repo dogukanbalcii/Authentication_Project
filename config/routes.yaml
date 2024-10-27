@@ -4,9 +4,16 @@ api_refresh_token:
     path: /api/token/refresh
 homepage:
     path: /
-    controller: App\Controller\DefaultController::index
+    controller: App\Controller\Site\DefaultController::index
 
 App\Controller\:
     resource: '../src/Controller/'
     type: attribute
-
+admin:
+    resource: '../src/Controller/Admin/'
+    type: annotation
+    prefix: /admin
+user:
+    resource: '../src/Controller/User/'
+    type: annotation
+    prefix: /user
