@@ -28,7 +28,6 @@ class LogoutSubscriber implements EventSubscriberInterface
         $user = $event->getToken()->getUser();
         if ($user instanceof User) {
             $user->setToken(null);
-            $user->setRefreshToken(null);
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();

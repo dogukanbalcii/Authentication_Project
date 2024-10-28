@@ -39,7 +39,6 @@ class JwtSuccessHandler implements AuthenticationSuccessHandlerInterface
         $this->refreshTokenManager->save($refreshToken);
 
         $user->setToken($jwt);
-        $user->setRefreshToken($refreshToken->getRefreshToken());
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

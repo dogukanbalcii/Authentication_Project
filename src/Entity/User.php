@@ -39,11 +39,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 1024, nullable: true)]
     private ?string $token = null;
 
-    /**
-     * @var string|null The refresh token for the user
-     */
-    #[ORM\Column(length: 1024, nullable: true)]
-    private ?string $refreshToken = null;
 
     public function getId(): ?int
     {
@@ -125,18 +120,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setToken(?string $token): static
     {
         $this->token = $token;
-
-        return $this;
-    }
-
-    public function getRefreshToken(): ?string
-    {
-        return $this->refreshToken;
-    }
-
-    public function setRefreshToken(?string $refreshToken): static
-    {
-        $this->refreshToken = $refreshToken;
 
         return $this;
     }
