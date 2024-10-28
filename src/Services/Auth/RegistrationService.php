@@ -4,27 +4,18 @@ namespace App\Services\Auth;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegistrationService
 {
-    private UserPasswordHasherInterface $userPasswordHasher;
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager)
-    {
-        $this->userPasswordHasher = $userPasswordHasher;
-        $this->entityManager = $entityManager;
-    }
-
-    public function registerUser(User $user, FormInterface $form): bool
+    public function registerUser(User $user, FormInterface $form, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): bool
     {
         $plainPassword = $form->get('plainPassword')->getData();
-        $user->setPassword($this->userPasswordHasher->hashPassword($user, $plainPassword));
+        $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
         return true;
     }

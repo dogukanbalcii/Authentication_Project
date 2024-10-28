@@ -8,19 +8,14 @@ use App\Services\Auth\RegistrationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 class RegistrationController extends AbstractController
 {
-    private RegistrationService $registrationService;
-
-    public function __construct(RegistrationService $registrationService)
-    {
-        $this->registrationService = $registrationService;
-    }
-
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request): Response
+    public function register(Request $request, RegistrationService $registrationService, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -29,7 +24,7 @@ class RegistrationController extends AbstractController
         $errors = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (!$this->registrationService->validateRegistrationForm($form, $errors)) {
+            if (!$registrationService->validateRegistrationForm($form, $errors)) {
                 foreach ($errors as $error) {
                     $this->addFlash('error', $error);
                 }
@@ -38,7 +33,7 @@ class RegistrationController extends AbstractController
                 ]);
             }
 
-            $this->registrationService->registerUser($user, $form);
+            $registrationService->registerUser($user, $form, $passwordHasher, $entityManager);
             return $this->redirectToRoute('homepage');
         }
 
